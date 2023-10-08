@@ -62,7 +62,7 @@ function setup(){
     matrix = matrixGenerator(50,50,8,5,10,10,5)
     createCanvas(side * matrix[0].length,side * matrix.length);
     background('gray')
-    frameRate(1)
+    frameRate(10)
     for(let y = 0;y<matrix.length;y++){
         for(let x = 0;x<matrix[y].length;x++){
             if(matrix[y][x]==1){                        
