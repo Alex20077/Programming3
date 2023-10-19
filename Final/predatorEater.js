@@ -1,4 +1,6 @@
-class PredatorEater extends LivingCreature{
+let LivingCreature = require("./livingCreature")
+let random = require('./random')
+module.exports = class PredatorEater extends LivingCreature{
     constructor(x , y ) {
         super(x , y)
         this.count = 2

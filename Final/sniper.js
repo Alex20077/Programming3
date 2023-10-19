@@ -1,4 +1,6 @@
-class Sniper extends LivingCreature{
+let LivingCreature = require("./livingCreature")
+let random = require('./random')
+module.exports = class Sniper extends LivingCreature{
     constructor(x, y){
         super(x , y)
         this.count = 3
