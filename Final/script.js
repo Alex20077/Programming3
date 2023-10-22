@@ -1,8 +1,23 @@
 
+
 let side = 20
 let sideX = 50;
 let sideY = 50;
 let socket = io();
+
+let count = 0;
+season.addEventListener("click" , exanak)
+function exanak(){
+    count++
+    if(count % 2 == 0){
+        season.innerHTML = "Amar"
+        intervalId = 100;
+    }else{
+        season.innerHTML = "Dzmer"
+        intervalId = 100;
+    }
+}
+
 
 function setup() {
     createCanvas(side * sideX, side * sideY);
@@ -16,7 +31,10 @@ function drawfull(matrix) {
             if (matrix[y][x] == 0) {
                 fill('gray')
                 rect(x * side, y * side, side, side)
-            } else if (matrix[y][x] == 1) {
+            } else if (matrix[y][x] == 1 && season.innerHTML == "Amar") {
+                fill('white')
+                rect(x * side, y * side, side, side)
+            }else if (matrix[y][x] == 1 && season.innerHTML == "Dzmer") {
                 fill('green')
                 rect(x * side, y * side, side, side)
             } else if (matrix[y][x] == 2) {
@@ -32,9 +50,17 @@ function drawfull(matrix) {
                 fill("black")
                 rect(x * side, y * side, side, side)
             }
+            else if (matrix[y][x] == 6) {
+                fill("orange")
+                rect(x * side, y * side, side, side)
+            } else if (matrix[y][x] == 7) {
+                fill("purple")
+                rect(x * side, y * side, side, side)
+            }
         }
     }
 }
 socket.on('update matrix', drawfull)
+
 
 

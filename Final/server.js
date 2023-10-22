@@ -19,15 +19,18 @@ let GrassEater = require('./grassEater.js')
 let Predator = require('./predator.js')
 let PredatorEater = require('./predatorEater.js')
 let Sniper = require('./sniper.js')
+let Bomb = require("./bomb.js")
+let Immortal = require("./immortal.js")
 grassArr = []
 grassEaterArr = []
 matrix = []
 predatorArr = []
 predatorEaterArr = []
 sniperArr = []
+bombArr = []
+immortalArr = []
 
-
-function matrixGenerator(sideX, sideY, countG, countGrE, countPr, countPrE, countS) {
+function matrixGenerator(sideX, sideY, countG, countGrE, countPr, countPrE, countS, countB, countI) {
    let arr = []
    for (let i = 0; i < sideX; i++) {
       arr.push([])
@@ -63,13 +66,23 @@ function matrixGenerator(sideX, sideY, countG, countGrE, countPr, countPrE, coun
       let y = Math.floor(Math.random() * sideY)
       arr[y][x] = 5
    }
+   for (let j = 0; j < countB; j++) {
+      let x = Math.floor(Math.random() * sideX)
+      let y = Math.floor(Math.random() * sideY)
+      arr[y][x] = 6
+   }
+   for (let j = 0; j < countI; j++) {
+      let x = Math.floor(Math.random() * sideX)
+      let y = Math.floor(Math.random() * sideY)
+      arr[y][x] = 7
+   }
 
 
    return arr;
 }
 
 function setupGame(){
-   matrix = matrixGenerator(50,50,8,5,10,10,5)
+   matrix = matrixGenerator(50,50,8,5,10,10,5,0,1)
    for(let y = 0;y<matrix.length;y++){
       for(let x = 0;x<matrix[y].length;x++){
           if(matrix[y][x]==1){                        
@@ -87,7 +100,13 @@ function setupGame(){
           }else if(matrix[y][x]==5){
               let sniperObj = new Sniper(x,y)
               sniperArr.push(sniperObj)
-          }
+          }else if(matrix[y][x]==6){
+            let bombObj = new Bomb(x,y)
+            bombArr.push(bombObj)
+        }else if(matrix[y][x]==7){
+         let immortalObj = new Immortal(x,y)
+         immortalArr.push(immortalObj)
+     }
       }
   }
 }
@@ -108,6 +127,12 @@ function playGame(){
   for (i = 0; i < sniperArr.length; i++) {
       sniperArr[i].eat()
   }
+  for (i = 0; i < immortalArr.length; i++) {
+   immortalArr[i].eat()
+}
+for (i = 0; i < bombArr.length; i++) {
+   bombArr[i].eat()
+}
   io.emit('update matrix', matrix)
 }
 
@@ -121,9 +146,15 @@ io.on("connection" , function (socket){
 
 let intervalID;
 
+
+
+
 function startPlaying(){
    clearInterval(intervalID);
    intervalID = setInterval(() => {
       playGame()  
-   }, 500);
+   }, intervalID);
 }
+
+
+
