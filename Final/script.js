@@ -1,5 +1,5 @@
 
-
+let isWinter = false;
 let side = 20
 let sideX = 50;
 let sideY = 50;
@@ -9,13 +9,14 @@ let count = 0;
 season.addEventListener("click" , exanak)
 function exanak(){
     count++
-    if(count % 2 == 0){
-        season.innerHTML = "Amar"
-        intervalId = 100;
-    }else{
-        season.innerHTML = "Dzmer"
-        intervalId = 100;
+    if (count % 2 == 0) {
+        season.innerHTML = 'Amar'
     }
+    else {
+        season.innerHTML = 'Dzmer'
+    }
+    socket.emit("update season", count);
+
 }
 
 
@@ -31,10 +32,10 @@ function drawfull(matrix) {
             if (matrix[y][x] == 0) {
                 fill('gray')
                 rect(x * side, y * side, side, side)
-            } else if (matrix[y][x] == 1 && season.innerHTML == "Amar") {
+            } else if (matrix[y][x] == 1 && season.innerHTML == "Dzmer") {
                 fill('white')
                 rect(x * side, y * side, side, side)
-            }else if (matrix[y][x] == 1 && season.innerHTML == "Dzmer") {
+            }else if (matrix[y][x] == 1 && season.innerHTML == "Amar") {
                 fill('green')
                 rect(x * side, y * side, side, side)
             } else if (matrix[y][x] == 2) {

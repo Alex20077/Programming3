@@ -13,7 +13,7 @@ server.listen(3000, function () {
 
 });
 
-
+let newCount = 0;
 let Grass = require('./grass.js')
 let GrassEater = require('./grassEater.js')
 let Predator = require('./predator.js')
@@ -21,6 +21,8 @@ let PredatorEater = require('./predatorEater.js')
 let Sniper = require('./sniper.js')
 let Bomb = require("./bomb.js")
 let Immortal = require("./immortal.js")
+let intervalID;
+let speed;
 grassArr = []
 grassEaterArr = []
 matrix = []
@@ -133,28 +135,43 @@ function playGame(){
 for (i = 0; i < bombArr.length; i++) {
    bombArr[i].eat()
 }
+if (newCount % 2 == 0) {
+   speed = 100
+}
+else {
+   speed = 1000
+}
+startPlaying()
+
   io.emit('update matrix', matrix)
 }
 
-io.on("connection" , function (socket){
+io.on('connection', (socket) => {
+
+   socket.on('update season', (count) => {
+      newCount = count
+
+   });
+});
+
+
+
+
+function startPlaying() {
+   clearInterval(intervalID)
+   intervalID = setInterval(() => {
+      playGame()
+      console.log(newCount);
+
+      console.log(speed);
+
+   }, speed)
+}
+
+
+
+io.on('connection', function (socket) {
    socket.emit('update matrix', matrix)
    setupGame()
    startPlaying()
 })
-
-
-
-let intervalID;
-
-
-
-
-function startPlaying(){
-   clearInterval(intervalID);
-   intervalID = setInterval(() => {
-      playGame()  
-   }, intervalID);
-}
-
-
-
