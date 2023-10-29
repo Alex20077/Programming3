@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+const fs = require('fs');
 app.use(express.static("."));
 app.get("/", function (req, res) {
    res.redirect("index.html");
@@ -14,6 +15,7 @@ server.listen(3000, function () {
 });
 
 let newCount = 0;
+let newGmp;
 let Grass = require('./grass.js')
 let GrassEater = require('./grassEater.js')
 let Predator = require('./predator.js')
@@ -135,6 +137,13 @@ function playGame(){
 for (i = 0; i < bombArr.length; i++) {
    bombArr[i].eat()
 }
+if (newGmp == true) {
+   for (var i in bombArr) {
+      bombArr[i].poco();
+      newGmp = false
+   }
+}
+
 if (newCount % 2 == 0) {
    speed = 100
 }
@@ -146,13 +155,7 @@ startPlaying()
   io.emit('update matrix', matrix)
 }
 
-io.on('connection', (socket) => {
 
-   socket.on('update season', (count) => {
-      newCount = count
-
-   });
-});
 
 
 
@@ -174,4 +177,15 @@ io.on('connection', function (socket) {
    socket.emit('update matrix', matrix)
    setupGame()
    startPlaying()
+   socket.on('update season', (count) => {
+      newCount = count
+
+   });
+   socket.on('paytyun', (gmp) => {
+      newGmp = gmp
+   });
+   socket.on('Total statistics', (data) => {
+      fs.writeFileSync('data.json', JSON.stringify(data))
+      socket.emit('display statistics', data)
+    })
 })

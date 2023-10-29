@@ -1,8 +1,4 @@
-
-let isWinter = false;
-let side = 20
-let sideX = 50;
-let sideY = 50;
+let side = 30
 let socket = io();
 
 let count = 0;
@@ -11,19 +7,28 @@ function exanak(){
     count++
     if (count % 2 == 0) {
         season.innerHTML = 'Amar'
-    }
+    } 
     else {
         season.innerHTML = 'Dzmer'
     }
+
+
     socket.emit("update season", count);
 
 }
+bomb.addEventListener("click", paytyun)
 
+function paytyun(){
+    gmp = true
+    socket.emit("paytyun", gmp)
+    gmp = false
+}
 
 function setup() {
-    createCanvas(side * sideX, side * sideY);
+    createCanvas(1500, 1500);
     background('gray')
 }
+
 
 
 function drawfull(matrix) {
@@ -59,9 +64,48 @@ function drawfull(matrix) {
                 rect(x * side, y * side, side, side)
             }
         }
+       
+function countAllChar() {
+    var allGrassCount = 0;
+    var allGrassEaterCount = 0;
+    var allPredatorCount = 0;
+    for (var y = 0; y < matrix.length; y++) {
+        for (var x = 0; x < matrix[y].length; x++) {
+            if (matrix[y][x] == 1) {
+                allGrassCount++;
+                data.allGrass = allGrassCount
+            }
+            if (matrix[y][x] == 2) { 
+                allGrassEaterCount++;
+                data.allGrassEater = allGrassEaterCount
+            }
+            if (matrix[y][x] == 3) { 
+                allPredatorCount++;
+                data.allPredator = allPredatorCount
+            }
+        }
     }
+
+    return data
 }
+socket.emit('Total statistics', countAllChar())
+    socket.on('display statistics', (data) => {
+        statistics = data
+
+        var updatedText = '';
+        for (var key in statistics) {
+            updatedText += '\n' + key + ' ' + statistics[key];
+        }
+        p.innerText = updatedText;
+
+
+    })
+}
+
+    }
+    var data = {}
+
+    var p = document.createElement('p')
+    document.body.appendChild(p)
+    
 socket.on('update matrix', drawfull)
-
-
-

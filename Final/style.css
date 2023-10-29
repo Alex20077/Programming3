@@ -7,3 +7,12 @@
     font-size: 35px;
     background-color: orange;
 }
+#bomb{
+    position: absolute;
+    left: 60%;
+    top: 30%;
+    height: 100px;
+    width: 300px;
+    font-size: 35px;
+    background-color: orange;
+}
